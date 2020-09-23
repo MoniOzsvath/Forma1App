@@ -11,8 +11,9 @@
         returnUrl = query["returnUrl"];
     }
 }
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/journal/bootstrap.min.css" crossorigin="anonymous">
 
-<ul class="navbar-nav">
+<ul class="navbar-nav navbar-dark bg-primary">
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
