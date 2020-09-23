@@ -1,16 +1,18 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Forma1App.Data;
 using Forma1App.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Forma1App.Repositories;
+using AutoMapper;
+using Forma1App.Controllers;
+using Microsoft.AspNetCore.Diagnostics;
+using Forma1App.Exceptions;
+using Microsoft.AspNetCore.Http;
 
 namespace Forma1App
 {
@@ -45,22 +47,37 @@ namespace Forma1App
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            //    services.AddControllers();
+            services.AddScoped<IForma1TeamRepository, Forma1TeamRepository>();
+            services.AddAutoMapper(typeof(Forma1TeamController).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            app.UseExceptionHandler(errorApp =>
+            errorApp.Run(async context =>
             {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+                context.Response.ContentType = "text/Plain";
+                var exceptionHandlerPathFeature =
+                    context.Features.Get<IExceptionHandlerPathFeature>();
+                if (exceptionHandlerPathFeature?.Error is EntityAlreadyExistsException)
+                {
+                    context.Response.StatusCode = 409;
+                    await context.Response.WriteAsync("Enity already exsist!");
+                }
+                else if (exceptionHandlerPathFeature?.Error is EntityNotFoundException)
+                {
+                    context.Response.StatusCode = 404;
+                    await context.Response.WriteAsync("Enity not found!");
+                }
+                else
+                {
+                    context.Response.StatusCode = 400;
+                    await context.Response.WriteAsync("Oops, something bad happened!");
+                }
+            }));
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -91,7 +108,8 @@ namespace Forma1App
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseAngularCliServer(npmScript: "start");
+                    //spa.UseAngularCliServer(npmScript: "start");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
         }
