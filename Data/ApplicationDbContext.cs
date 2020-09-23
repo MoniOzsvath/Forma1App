@@ -17,5 +17,7 @@ namespace Forma1App.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+
+        public DbSet<Forma1TeamEntity> Forma1Teams { get; set; }
     }
 }
