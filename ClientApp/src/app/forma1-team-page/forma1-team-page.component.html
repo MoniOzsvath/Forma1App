@@ -1,0 +1,33 @@
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Founded date</th>
+      <th scope="col">Winned championships count</th>
+      <th scope="col">Paied entry fee</th>
+      <th *ngIf="loggedIn">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let team of forma1Teams">
+      <td>{{ team.name }}</td>
+      <td>{{ team.foundedDate | date: 'yyyy.MM.dd.'}} </td>
+      <td>{{ team.winnedChampionshipsCount }}</td>
+      <td>{{ team.paiedEntryFee  }}</td>
+      <td *ngIf="loggedIn">
+        <button type="button" class="btn btn-outline-warning mr-3" (click)="onModalOpen(team)" placement="top" ngbTooltip="Update">
+          <bi name="pencil" class="big"></bi>
+        </button>
+        <button type="button" class="btn btn-outline-danger" (click)="onDelet(team.id)" placement="top" ngbTooltip="Delete">
+          <bi name="trash" class="big"></bi>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<button *ngIf="loggedIn" type="button" class="btn btn-outline-success " (click)="onModalOpen(null)">
+  <span>Add Team</span>
+</button>
+

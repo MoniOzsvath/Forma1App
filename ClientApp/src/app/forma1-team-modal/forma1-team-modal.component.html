@@ -1,0 +1,42 @@
+<div class="modal-header">
+  <h5 class="modal-title">Forma1Team</h5>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form>
+    <div class="form-group row">
+      <label for="name" class="col-sm-2 col-form-label">Name</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="name" required
+               [(ngModel)]="team.name" name="name" placeholder="Please add name here">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="foundedDate" class="col-sm-2 col-form-label">Founded date</label>
+      <div class="col-sm-10">
+        <input type="date" class="form-control" id="foundedDate" required
+               [ngModel]="team.foundedDate | date:'yyyy-MM-dd'" name="foundedDate" (ngModelChange)="team.foundedDate = $event">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="winndedChampionShip" class="col-sm-2 col-form-label">Winned championship</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" id="winndedChampionShip" required
+               [(ngModel)]="team.winnedChampionshipsCount" name="winndedChampionShip" />
+      </div>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="paiedEntryFee" required
+             [(ngModel)]="team.paiedEntryFee" name="paiedEntryFee" />
+      <label class="form-check-label" for="paiedEntryFee">
+        Payed entry fee
+      </label>s
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="activeModal.close(team)" [disabled]="!team.name || !team.foundedDate">Save changes</button>
+</div>
+
