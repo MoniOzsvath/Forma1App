@@ -8,9 +8,7 @@ import { IconsModule } from './icons/icons.module';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
-import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { Forma1TeamPageComponent } from './forma1-team-page/forma1-team-page.component';
 import { Forma1TeamModalComponent } from './forma1-team-modal/forma1-team-modal.component';
@@ -21,7 +19,6 @@ import { ToastComponent } from './toast/toast.component';
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
     Forma1TeamPageComponent,
     Forma1TeamModalComponent,
     ToastComponent,
