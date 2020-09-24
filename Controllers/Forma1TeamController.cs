@@ -6,11 +6,13 @@ using AutoMapper;
 using Forma1App.Controllers.Dtos;
 using Forma1App.Models;
 using Forma1App.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Forma1App.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class Forma1TeamController : ControllerBase
@@ -26,6 +28,7 @@ namespace Forma1App.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
