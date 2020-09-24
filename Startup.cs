@@ -13,6 +13,9 @@ using Forma1App.Controllers;
 using Microsoft.AspNetCore.Diagnostics;
 using Forma1App.Exceptions;
 using Microsoft.AspNetCore.Http;
+using SQLitePCL;
+using Microsoft.Data.Sqlite;
+using Forma1App.Data.Utils;
 
 namespace Forma1App
 {
@@ -20,17 +23,21 @@ namespace Forma1App
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = configuration;            
         }
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+           var inMemorySqlite = new SqliteConnection("Data Source=:memory:");
+            inMemorySqlite.Open();
+            
+            services.AddDbContext<ApplicationDbContext>(options => {
+                options.UseSqlite(inMemorySqlite);
+            });
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -51,11 +58,19 @@ namespace Forma1App
             //    services.AddControllers();
             services.AddScoped<IForma1TeamRepository, Forma1TeamRepository>();
             services.AddAutoMapper(typeof(Forma1TeamController).Assembly);
+
+            services.AddTransient<IdentityInitializer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            ApplicationDbContext context,
+            IdentityInitializer identityInitializer)
         {
+            context.Database.EnsureCreated();
+
             app.UseExceptionHandler(errorApp =>
             errorApp.Run(async context =>
             {
@@ -91,6 +106,9 @@ namespace Forma1App
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
+
+            identityInitializer.SeedAdminUser();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
