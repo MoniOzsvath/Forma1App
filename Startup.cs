@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using SQLitePCL;
 using Microsoft.Data.Sqlite;
 using Forma1App.Data.Utils;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace Forma1App
 {
@@ -126,8 +127,8 @@ namespace Forma1App
 
                 if (env.IsDevelopment())
                 {
-                    //spa.UseAngularCliServer(npmScript: "start");
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                    spa.UseAngularCliServer(npmScript: "start");
+                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
         }
