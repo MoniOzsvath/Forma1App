@@ -46,15 +46,14 @@ export class Forma1TeamPageComponent implements OnInit, OnDestroy {
 
   onEdit(team: TeamAddOrUpdate): void {
     this.forma1TeamService.updateTeam(team).pipe(first()).subscribe((teamReturn: TeamReturn) => {
-      const index = this.forma1Teams.findIndex(y => y.id = teamReturn.id);
+      const index = this.forma1Teams.findIndex(y => y.id === teamReturn.id);
       this.forma1Teams[index] = teamReturn;
     });
   }
 
   onDelet(id: number): void {
     this.forma1TeamService.deleteTeam(id).pipe(first()).subscribe(() => {
-      const index = this.forma1Teams.findIndex(x => x.id = id);
-      this.forma1Teams.splice(index, 1);
+      this.forma1Teams = this.forma1Teams.filter(x => x.id !== id);
     });
   }
 
