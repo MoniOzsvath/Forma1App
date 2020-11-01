@@ -15,10 +15,10 @@ import { Forma1TeamModalComponent } from '../forma1-team-modal/forma1-team-modal
 })
 export class Forma1TeamPageComponent implements OnInit, OnDestroy {
 
-  private forma1Teams: TeamReturn[] = [];
   private forma1TeamsSubscription: Subscription;
-  private loggedIn = false;
   private loggedInSubsciption: Subscription;
+  forma1Teams: TeamReturn[] = [];
+  loggedIn = false;
 
   constructor(
     private forma1TeamService: Forma1TeamService,
